@@ -83,4 +83,3 @@ class QuestionUpvote(Resource):
 
         response.update({'status': status_code, 'message': message})
         return response, status_code
-
