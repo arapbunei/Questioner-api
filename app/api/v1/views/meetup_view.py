@@ -52,27 +52,4 @@ class Meetups(Resource):
         result = MeetupSchema(many=True).dump(meetups)
         return {'status':200, 'data':result}, 200
 
-class Meetup(Resource):
-    """ Resource for single meetup item """
-
-    def get(self, meetup_id):
-        """ Endpoint to fetch specific meetup """
-
-        status_code = 200
-        response = {}
-
-        if not db.exists('id', meetup_id):
-            status_code = 404
-            response.update({'message': 'Meetup not found'})
-
-        else:
-            meetup = db.find('id', meetup_id)
-            result = MeetupSchema().dump(meetup)
-
-            status_code = 200
-            response.update({'data': result})
-
-        response.update({'status': status_code})
-        return response, status_code
-
 
