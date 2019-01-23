@@ -52,3 +52,4 @@ class Meetups(Resource):
         result = MeetupSchema(many=True).dump(meetups)
         return {'status':200, 'data':result}, 200
 
+
