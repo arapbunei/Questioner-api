@@ -59,27 +59,4 @@ class Question(Resource):
 
         response.update({'status': status_code, 'message': message})
         return response, status_code
-class QuestionUpvote(Resource):
-    """ Resource for upvoting question """
 
-    def patch(self, question_id):
-        """ Endpoint to upvote question """
-
-        message = ''
-        status_code = 200
-        response = {}
-
-        if not db.exists('id', question_id):
-            message = 'Question not found'
-            status_code = 404
-
-        else:
-            question = db.upvote(question_id)
-            result = QuestionSchema().dump(question)
-
-            message = 'Question upvoted successfully'
-            status_code = 200
-            response.update({'data': result})
-
-        response.update({'status': status_code, 'message': message})
-        return response, status_code
