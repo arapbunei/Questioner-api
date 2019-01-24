@@ -6,20 +6,24 @@
 This is a platform that allows organizers to plan meetups and to prioritize which questions will be answered depending on the questions with more votes. 
 
 
+#### Deployment
+
+
 #### Tools used in this API includes:-
-- Flask
-- Git Version Control
-- Pytest
-- Postman
+- python 2.7
 - Git
+- Postman
+
 
 
 #### Installation
-- cloning the Repository $ git clone https://github.com/exdus/Questioner
+- clone the repo $ git clone https://github.com/exdus/Questioner-api
 - checkout develop branch
 - create a virtual environment
 	• virtualenv env
     • source venv/bin/activate
+- install dependencies
+    . pip install -r requirements.txt
 
 - python run.py
 - Test the api using postman
@@ -27,6 +31,9 @@ This is a platform that allows organizers to plan meetups and to prioritize whic
 #### Endpoints
 Method        | EndPoint         | Goal |
 ------------- | -----------------| ---------------
+POST          | /api/v1/register |  register on the app
+POST          | /api/v1/login     |  log into the app
+POST          | /api/v1/logout  |  log out the app
 POST          | /api/v1/meetups  | Post a new meetup record   |
 GET           | /api/v1/meetups/<int:meetup_id>  | Get a specific meetup   |
 GET           | /api/v1/meetups/upcoming   | Get all upcoming meetup records   |
@@ -34,7 +41,8 @@ POST          | /api/v1/meetup/<int:meetup_id>/question | Create a question for 
 PUT           | /api/v1/questions/<int:question_id>/upvote | Adds votes by one |
 PUT           | /api/v1/questions/<int:question_id>/downvote | Decreases votes by one  |
 POST          | /api/v1/meetups/<int:meetup_id>/rsvps | Create a meetup RSVP
-
+POST          | /api/v1/questions/<int:question_id/comments  | comment on a question
+GET           | /api/v1/questions/<int:question_id>/comments | get all comments
 
 #### Recognitions
 - Tonui Benson
