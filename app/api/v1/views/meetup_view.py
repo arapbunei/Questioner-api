@@ -96,5 +96,52 @@ class Meetup(Resource):
         response.update({'status': status_code, 'message': message})
         return response, status_code
 
+class MeetupsUpcoming(Resource):
+    """ Resource for upcoming meetups """
 
+    def get(self):
+        """ Endpoint to fetch all meetups """
+
+        meetups = db.all()
+        result = MeetupSchema(many=True).dump(meetups)
+        return {'status':200, 'data':result}, 200
+
+class MeetupRsvp(Resource):
+    """ Resource for meetup rsvp """
+
+    @jwt_required
+    def post(self, meetup_id, rsvp):
+        """ Endpoint to RSVP to meetup """
+
+        message = ''
+        status_code = 200
+        response = {}
+
+        valid_responses = ('yes', 'no', 'maybe')
+
+        if not db.exists('id', meetup_id):
+            print('Meetup not found')
+            status_code = 404
+            message = 'Meetup not found'
+
+        elif rsvp not in valid_responses:
+            status_code = 400
+            message = 'Invalid rsvp'
+
+        else:
+            meetup = db.find('id', meetup_id)
+
+            status_code = 200
+            message = 'Meetup rsvp successfully'
+            response.update({
+                'data': {
+                    'user_id': get_jwt_identity(),
+                    'meetup_id': meetup['id'],
+                    'topic' : meetup['topic'],
+                    'status': rsvp
+                }
+            })
+
+        response.update({'status': status_code, 'message': message})
+        return response, status_code
 
