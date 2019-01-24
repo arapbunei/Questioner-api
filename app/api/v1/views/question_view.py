@@ -108,3 +108,23 @@ class QuestionDownvote(Resource):
 
         response.update({'status': status_code, 'message': message})
         return response, status_code
+class QuestionList(Resource):
+    """ Resource for questions list """
+
+    def get(self, meetup_id):
+        """ Endpoint to fetch all questions for a specific meetup """
+
+        status_code = 200
+        response = {}
+
+        if not meetups_db.exists('id', meetup_id):
+            status_code = 404
+            response.update({'message': 'Meetup not found'})
+
+        else:
+            questions = db.all()
+            result = QuestionSchema(many=True).dump(questions)
+            response.update({'data': result})
+
+        response.update({'status': status_code})
+        return response, status_code
