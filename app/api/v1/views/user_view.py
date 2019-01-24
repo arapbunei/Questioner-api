@@ -67,10 +67,6 @@ class Register(Resource):
 
         response.update({'status': status_code, 'message': message})
         return response, status_code
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 class Login(Resource):
     """ Resource to login existing user """
 
@@ -151,7 +147,5 @@ class Logout(Resource):
 
         RevokedTokenModel().add(user_jti)
         return {'status': 200, 'message': 'Logged out successfully'}, 200
->>>>>>> ft-login-163415568
-=======
->>>>>>> 39dcb307e392d8d5f7c38b09a98a359e0c09e46b
+
 
