@@ -84,3 +84,27 @@ class QuestionUpvote(Resource):
 
         response.update({'status': status_code, 'message': message})
         return response, status_code
+class QuestionDownvote(Resource):
+    """ Resource for downvoting question """
+
+    def patch(self, question_id):
+        """ Endpoint to downvote question """
+
+        message = ''
+        status_code = 200
+        response = {}
+
+        if not db.exists('id', question_id):
+            message = 'Question not found'
+            status_code = 404
+
+        else:
+            question = db.downvote(question_id)
+            result = QuestionSchema().dump(question)
+
+            message = 'Question downvoted successfully'
+            status_code = 200
+            response.update({'data': result})
+
+        response.update({'status': status_code, 'message': message})
+        return response, status_code
