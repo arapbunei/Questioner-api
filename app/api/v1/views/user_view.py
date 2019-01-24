@@ -126,3 +126,14 @@ class Login(Resource):
         response.update({'status': status_code, 'message': message})
         return response, status_code
 
+class Tokens(Resource):
+    """ Resource to refresh access token """
+
+    @jwt_refresh_token_required
+    def post(self):
+        """ Endpoint to refresh user access token """
+
+        current_user = get_jwt_identity()
+        access_token = create_access_token(identity=current_user)
+        return {'status': 200, 'message': 'Token refreshed successfully', 'access_token': access_token}
+
