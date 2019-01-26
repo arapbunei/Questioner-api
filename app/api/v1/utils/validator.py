@@ -6,7 +6,7 @@ def required(value):
 
     if isinstance(value, str):
         if not value.strip(' '):
-            raise ValidationError('This parameter cannot be null')
+            raise ValidationError('Kindly fill all the required fields')
         return value
     elif value:
         return value

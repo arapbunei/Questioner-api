@@ -1,72 +1,39 @@
-from flask import jsonify, request, make_response, Response, json
-from ..schemas.user_schema import UserSchema
-from ..models.user_model import User
-from ..models.token_model import RevokedTokenModel
-from marshmallow import ValidationError
-from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required,
-                             get_jwt_identity, jwt_refresh_token_required, get_raw_jwt)
+import os
+import datetime
+import jwt
+from flask import jsonify, request, make_response, Response, json,make_response
+from ..models.models import USER_LIST, UserModels
+from ..utils.validations import UserValidation
 from flask_restful import Resource
+time_now = datetime.datetime.now()
 
-db = User()
 
 class Index(Resource):
     """ Resource for index endpoint """
     
     def get(self):
-        return {'status': 200, 'message': 'Welcome to Questioner'}, 200
-
+        return {'status': 200, 'message': 'Welcome to Questioner!!. A meetup platform'}, 200
 class Register(Resource):
-    """ Resource to register new user """
-
     def post(self):
-        """ Endpoint to register user """
-
-        message = ''
-        status_code = 200
-        response = {}
-
-        register_data = request.get_json()
-
-        if not register_data:
-            message = 'No data provided'
-            status_code = 400
-
-        else:
-            try:
-                data = UserSchema().load(register_data)
-
-                if next(filter(lambda u: u['username'] == data['username'], db.all()), None):
-                    status_code =  409
-                    message = 'Username already exists'
-
-                elif db.exists('email', data['email']):
-                    status_code =  409
-                    message = 'Email already exists'
-
-                else:
-                    new_user = db.save(data)
-                    result = UserSchema(exclude=['password']).dump(new_user)
-
-                    access_token = create_access_token(identity=new_user['id'], fresh=True)
-                    refresh_token = create_refresh_token(identity=new_user['id'])
-
-                    status_code = 201
-                    message = 'User created successfully'
-                    response.update({
-                        'data': result,
-                        'access_token' : access_token,
-                        'refresh_token' : refresh_token
-                    })
-
-            except ValidationError as err:
-                errors = err.messages
-
-                status_code = 400
-                message = 'Invalid data. Please fill all required fields'
-                response.update({'errors': errors})
-
-        response.update({'status': status_code, 'message': message})
-        return response, status_code
+        """ endpoint for user to create account """
+        try:
+            user_data = request.get_json()
+            if not user_data:
+                return jsonify({"status": 404, "error": "no userdata data!!"}), 404
+            validate = UserValidation(user_data)
+            users = UserModels(USER_LIST, user_data)
+            users.check_required_present(users.required_signup)
+            validate.valid_username()
+            validate.valid_email()
+            validate.valid_password()
+            validate.check_signup_exists()
+            new_user = users.autogen_id_and_defaults()
+            users.add_admin_status()
+            new_user = users.save_the_data()
+            return make_response(jsonify({"status": 201, "data": new_user}), 201)
+        except TypeError:
+            return make_response(jsonify({"status": 417, "error": "Expecting signup data!!"}), 417)
+        
 class Login(Resource):
     """ Resource to login existing user """
 
