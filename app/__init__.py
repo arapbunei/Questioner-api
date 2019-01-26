@@ -25,13 +25,13 @@ def create_app(config_name):
     def index():
         """ Endpoint for the landing page """
 
-        return jsonify({'status': 200, 'message': 'Welcome to Questioner'})
+        return jsonify({'status': 200, 'message': 'Questioner, Meetups Platform'})
 
     @app.errorhandler(404)
     def page_not_found(error):
         """ Handler for error 404 """
 
-        return jsonify({'status': 404, 'message': 'Oops! The requested page was not found'}), 404
+        return jsonify({'status': 404, 'message': 'The requested page does not exist'}), 404
 
     @app.errorhandler(405)
     def method_not_allowed(error):

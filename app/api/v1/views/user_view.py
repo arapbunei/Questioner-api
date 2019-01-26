@@ -1,7 +1,7 @@
 import os
 import datetime
 import jwt
-from flask import jsonify, request, make_response, Response, json,make_response
+from flask import jsonify, request, make_response, Response, json
 from ..models.models import USER_LIST, UserModels
 from ..utils.validations import UserValidation
 from flask_restful import Resource
@@ -12,14 +12,14 @@ class Index(Resource):
     """ Resource for index endpoint """
     
     def get(self):
-        return {'status': 200, 'message': 'Welcome to Questioner!!. A meetup platform'}, 200
+        return make_response({'status': 200, 'message': 'Welcome to Questioner!!. A meetup platform'}, 200)
 class Register(Resource):
     def post(self):
         """ endpoint for user to create account """
         try:
             user_data = request.get_json()
             if not user_data:
-                return jsonify({"status": 404, "error": "no userdata data!!"}), 404
+                return make_response(jsonify({"status": 404, "error": "no userdata data!!"}), 404)
             validate = UserValidation(user_data)
             users = UserModels(USER_LIST, user_data)
             users.check_required_present(users.required_signup)
