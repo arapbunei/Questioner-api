@@ -33,7 +33,6 @@ Method        | EndPoint         | Goal |
 ------------- | -----------------| ---------------
 POST          | /api/v1/signup |  register on the app
 POST          | /api/v1/login     |  log into the app
-POST          | /api/v1/logout  |  log out the app
 POST          | /api/v1/meetups  | Post a new meetup record   |
 GET           | /api/v1/meetups/<int:meetup_id>  | Get a specific meetup   |
 GET           | /api/v1/meetups/upcoming   | Get all upcoming meetup records   |
