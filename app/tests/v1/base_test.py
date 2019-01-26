@@ -1,7 +1,6 @@
 import unittest
 from app import create_app
-from app.api.v1.models.user_model import users
-
+from app.api.v1.models.models import USER_LIST, UserModels
 class BaseTest(unittest.TestCase):
     """ Base class for Tests """
 
