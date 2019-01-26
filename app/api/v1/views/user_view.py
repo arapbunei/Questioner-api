@@ -35,84 +35,23 @@ class Register(Resource):
             return make_response(jsonify({"status": 417, "error": "Expecting signup data!!"}), 417)
         
 class Login(Resource):
-    """ Resource to login existing user """
-
     def post(self):
-        """ Endpoint to login user """
+        """ endpoint for users to sign in """
+        try:
+            log_data = request.get_json()
+            if not log_data:
+                return jsonify({"status": 404, "error": "No data found"}), 404
 
-        message = ''
-        status_code = 200
-        response = {}
-
-        login_data = request.get_json()
-
-        if not login_data:
-            message = 'No data provided'
-            status_code = 400
-
-        else:
-            try:
-                data = UserSchema().load(login_data, partial=True)
-
-                try:
-                    username = data['username']
-                    password = data['password']
-
-                    if not db.exists('username', username):
-                        status_code = 404
-                        message = 'User not found'
-
-                    else:
-                        user = db.find('username', username)
-
-                        db.checkpassword(user['password'], password)
-
-                        access_token = create_access_token(identity=user['id'], fresh=True)
-                        refresh_token = create_refresh_token(identity=True)
-
-                        status_code = 200
-                        message = 'User logged in successfully'
-                        response.update({
-                            'access_token': access_token,
-                            'refresh_token': refresh_token,
-                            'user_id': user['id']
-                        })
-                    
-                except:
-                    status_code = 400
-                    message = 'Invalid credentials'
-
-            except ValidationError as err:
-                errors = err.messages
-
-                status_code = 400
-                message = 'Invalid data. Please fill all required fields'
-                response.update({'errors': errors})
-
-        response.update({'status': status_code, 'message': message})
-        return response, status_code
-
-class Tokens(Resource):
-    """ Resource to refresh access token """
-
-    @jwt_refresh_token_required
-    def post(self):
-        """ Endpoint to refresh user access token """
-
-        current_user = get_jwt_identity()
-        access_token = create_access_token(identity=current_user)
-        return {'status': 200, 'message': 'Token refreshed successfully', 'access_token': access_token}
-
-class Logout(Resource):
-    """ Resource to logout user """
-
-    @jwt_required
-    def post(self):
-        """ Endpoint to logout user """
-
-        user_jti = get_raw_jwt()['jti']
-
-        RevokedTokenModel().add(user_jti)
-        return {'status': 200, 'message': 'Logged out successfully'}, 200
+            users = UserModels(USER_LIST, log_data)
+            validate = UserValidation(log_data)
+            users.check_required_present(users.required_login)
+            validate.confirm_login(log_data["userlog"])
+            logged_in_user = validate.correct_details[0]
+            exp = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+            token = jwt.encode(
+            {"password": logged_in_user['password'], 'exp': exp}, KEY)
+            return make_response(jsonify({"status": 200, "message": "logged in successfully", "token": token.decode("utf-8")}), 200)
+        except TypeError:
+            return make_response(jsonify({"status": 417, "error": "Expecting Login data!!"}), 417  )
 
 
