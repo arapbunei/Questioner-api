@@ -31,7 +31,7 @@ This is a platform that allows organizers to plan meetups and to prioritize whic
 #### Endpoints
 Method        | EndPoint         | Goal |
 ------------- | -----------------| ---------------
-POST          | /api/v1/register |  register on the app
+POST          | /api/v1/signup |  register on the app
 POST          | /api/v1/login     |  log into the app
 POST          | /api/v1/logout  |  log out the app
 POST          | /api/v1/meetups  | Post a new meetup record   |
