@@ -1,24 +1,19 @@
+import os
 from flask import Flask, jsonify
-from .instance.config import app_config
+from instance.config import app_config
 from flask_jwt_extended import (JWTManager)
 from app.api.v1 import version_1 
 
 def create_app(config_name):
-    """ Function to initialize Flask app """
+    """ initialize Flask app """
 
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(app_config[config_name])
+    app.config['SECRET_KEY'] = os.getenv("SECRET")
     app.config.from_pyfile('config.py')
-
-    jwt = JWTManager(app)
-
     app.register_blueprint(version_1)
 
-    @jwt.token_in_blacklist_loader
-    def check_blacklisted(token):
-        from app.api.v1.models.token_model import RevokedTokenModel
-        jti = token['jti']
-        return RevokedTokenModel().is_blacklisted(jti)
+   
 
     @app.route('/')
     @app.route('/index')

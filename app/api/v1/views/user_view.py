@@ -49,7 +49,7 @@ class Login(Resource):
             logged_in_user = validate.correct_details[0]
             exp = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
             token = jwt.encode(
-            {"password": logged_in_user['password'], 'exp': exp}, KEY)
+            {"password": logged_in_user['password'], 'exp': exp})
             return make_response(jsonify({"status": 200, "message": "logged in successfully", "token": token.decode("utf-8")}), 200)
         except TypeError:
             return make_response(jsonify({"status": 417, "error": "Expecting Login data!!"}), 417  )
