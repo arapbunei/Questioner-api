@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from ..instance.config import app_config
+from instance.config import app_config
 from flask_jwt_extended import (JWTManager)
 from app.api.v1 import version_1 
 
