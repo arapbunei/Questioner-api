@@ -53,6 +53,5 @@ urllib3==1.7.1
 virtualenv==1.11.4
 virtualenv-clone==0.4.0
 Werkzeug==0.14.1
-xdiagnose===3.6.3build2
 xlwt==0.7.5
 zope.interface==4.0.5
