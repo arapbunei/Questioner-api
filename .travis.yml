@@ -1,7 +1,11 @@
+
+
+
+
 language: python
 
 python:
-  - "3.6"
+  - "2.7"
 
 install:
   - easy_install distribute
@@ -14,3 +18,8 @@ script:
 
 after_success:
   - coveralls
+
+
+
+
+
