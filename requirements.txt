@@ -45,7 +45,6 @@ reportlab==3.0
 requests==2.2.1
 roman==2.0.0
 six==1.12.0
-software-center-aptd-plugins==0.0.0
 Sphinx==1.2.2
 SQLAlchemy==1.2.7
 system-service==0.1.6
