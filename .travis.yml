@@ -14,7 +14,7 @@ install:
 
 
 script:
-  - pytest --cov=Questioner-api/apptests/v1/test_meet.py/
+  - pytest --cov=app
 
 after_success:
   - coveralls

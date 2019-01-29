@@ -1,3 +1,7 @@
+
+
+
+
 import os
 from flask import Flask, jsonify
 from instance.config import app_config
@@ -7,7 +11,8 @@ from app.api.v1 import version_1
 def create_app(config_name):
     """ initialize Flask app """
 
-    app = Flask(__name__, instance_relative_config=True)
+    #app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_path='Questioner-api/instance/config.py')
     app.config.from_object(app_config[config_name])
     app.config['SECRET_KEY'] = os.getenv("SECRET")
     app.config.from_pyfile('config.py')
