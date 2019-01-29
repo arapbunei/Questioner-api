@@ -10,7 +10,7 @@ db = MeetupModel()
 class Meetups(Resource):
     """ Resource for meetup endpoints """
 
-    @jwt_required
+    #@jwt_required
     def post(self):
         """ Endpoint to create meetup """
 
@@ -75,7 +75,7 @@ class Meetup(Resource):
         response.update({'status': status_code})
         return response, status_code
 
-    @jwt_required
+    #@jwt_required
     def delete(self, meetup_id):
         """ Endpoint to delete meetup """
 
@@ -109,7 +109,7 @@ class MeetupsUpcoming(Resource):
 class MeetupRsvp(Resource):
     """ Resource for meetup rsvp """
 
-    @jwt_required
+    #@jwt_required
     def post(self, meetup_id, rsvp):
         """ Endpoint to RSVP to meetup """
 
