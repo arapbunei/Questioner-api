@@ -1,5 +1,4 @@
 
-autoenv==1.0.0
 certifi==2018.11.29
 chardet==2.0.1
 Cheetah==2.4.4
