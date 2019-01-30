@@ -1,37 +1,37 @@
-
-
-
-
-import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify,Blueprint
 from instance.config import app_config
 from flask_jwt_extended import (JWTManager)
 from app.api.v1 import version_1 
 
 def create_app(config_name):
-    """ initialize Flask app """
+    """ Function to initialize Flask app """
 
-    #app = Flask(__name__, instance_relative_config=True)
-    app = Flask(__name__, instance_path='Questioner-api/instance/config.py')
+    app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(app_config[config_name])
-    app.config['SECRET_KEY'] = os.getenv("SECRET")
     app.config.from_pyfile('config.py')
+
+    jwt = JWTManager(app)
+
     app.register_blueprint(version_1)
 
-   
+    @jwt.token_in_blacklist_loader
+    def check_blacklisted(token):
+        from app.api.v1.models.token_model import RevokedTokenModel
+        jti = token['jti']
+        return RevokedTokenModel().is_blacklisted(jti)
 
     @app.route('/')
     @app.route('/index')
     def index():
         """ Endpoint for the landing page """
 
-        return jsonify({'status': 200, 'message': 'Questioner, Meetups Platform'})
+        return jsonify({'status': 200, 'message': 'Meetups Platform'})
 
     @app.errorhandler(404)
     def page_not_found(error):
         """ Handler for error 404 """
 
-        return jsonify({'status': 404, 'message': 'The requested page does not exist'}), 404
+        return jsonify({'status': 404, 'message': 'The requested page is not avaiable'}), 404
 
     @app.errorhandler(405)
     def method_not_allowed(error):
