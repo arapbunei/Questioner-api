@@ -22,7 +22,7 @@ numpy==1.8.2
 numpydoc==0.4
 oauthlib==0.6.1
 pexpect==3.1
-Pillow==2.3.0
+Pillow==6.2.0
 pipenv==2018.11.26
 piston-mini-client==0.7.5
 psycopg2==2.7.6.1
